@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5cdbe7c5-9a98-4d7c-aa56-0abbf4e39db1" name="Default" comment="Added TODO reminders">
+    <list default="true" id="5cdbe7c5-9a98-4d7c-aa56-0abbf4e39db1" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TestHashMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TestHashMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hashmap/MyHashMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/hashmap/MyHashMap.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -64,7 +62,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="843" />
@@ -172,12 +170,20 @@
       <option name="presentableId" value="Default" />
       <updated>1522862527746</updated>
       <workItem from="1522862534579" duration="6257000" />
-      <workItem from="1522869969329" duration="2365000" />
+      <workItem from="1522869969329" duration="2916000" />
     </task>
+    <task id="LOCAL-00001" summary="Added TODO reminders -- fixes that are needed next class">
+      <created>1522896198072</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1522896198072</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8622000" />
+    <option name="totallyTimeSpent" value="9173000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="843" extended-state="0" />
@@ -222,7 +228,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added TODO reminders" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added TODO reminders" />
+    <MESSAGE value="Added TODO reminders -- fixes that are needed next class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added TODO reminders -- fixes that are needed next class" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/hashmap/MyHashMap.java">
