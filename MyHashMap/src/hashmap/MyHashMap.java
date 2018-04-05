@@ -74,6 +74,8 @@ public class MyHashMap<K, V> {
             return false;
         }
 
+        // look for next empty or inactive spot
+        // TODO: change && -- need condition to short circuit if table[index] is null
         while (table[index] != null || table[index].active) {
 
             index = ++index % table.length;
@@ -85,6 +87,7 @@ public class MyHashMap<K, V> {
         return true;
     }
 
+    // TODO: make helper method (private)
     public int find(K key) {
 
         if (tableUsageExceedsLF()) {

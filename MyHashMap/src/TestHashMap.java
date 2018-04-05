@@ -7,6 +7,7 @@ public class TestHashMap {
 
     }
 
+    // TODO: add static
     private static class Flights {
         private int flightNo;
         private String destination;
