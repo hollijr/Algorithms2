@@ -9,13 +9,13 @@ public class MyHashMap<K, V> {
 
     // constants for managing the table
     private static final double LOAD_FACTOR = 0.7;
-    private static final int INITIAL_TABLE_SIZE = 13;
+    private static final int INITIAL_TABLE_SIZE = 7;
     private static final double RESIZE_FACTOR = 2;
 
     private KVPair[] table;
 
-    private int size; // number of actual active elements in table
-    private int usedSpaces; // number of spaces that are active or inactive
+    private int size; // number of filled elements in table
+    private int tombstones; // number of spaces that are inactive
 
     // constructor
     public MyHashMap() {
@@ -28,86 +28,106 @@ public class MyHashMap<K, V> {
 
     // get size of table
     public int size() {
-        return size;
+        return size - tombstones;
     }
 
     // is table empty?
     public boolean isEmpty() {
-        return size == 0;
+        return (size - tombstones) == 0;
     }
 
     public void clear() {
         size = 0;  // reset the active elements tracker
-        usedSpaces = 0;  // reset the all elements tracker
+        tombstones = 0;  // reset the all elements tracker
         table = new KVPair[INITIAL_TABLE_SIZE];
     }
 
     // overload for users who want to specify a starting table size
     public void clear(int tableSize) {
         size = 0;  // reset the active elements tracker
-        usedSpaces = 0;  // reset the all elements tracker
+        tombstones = 0;  // reset the all elements tracker
         table = new KVPair[tableSize];
     }
 
 
-    // add using linear probing
-    public boolean add(K key, V value) {
+    /**
+     * Add a value to the table based on a new key.  Keys must be unique.
+     * Adding an existing (active) key will update the value associated
+     * with the key.  Use FCFS linear probing to resolve collisions.
+     * @param key
+     * @param value
+     * @return
+     */
+    public void add(K key, V value) {
+
+        // check that key is not null
+        if (key == null) throw new IllegalArgumentException("Key cannot be null");
+
         // check load factor to see if table needs to be resized
         if (tableSizeExceedsLF()) {
-            rehash();
+            resize();
         }
 
-        int code = key.hashCode();
-        int index = code % table.length;
+        int index = getHashIndex(key);
 
+        /********** start: this is for testing purposes *************/
         if (table[index] == null) {
             System.out.println("Found a space!");
         } else {
             System.out.println("Collision!");
         }
+        /********** end: this is for testing purposes *************/
 
-        // check the slot to see if it already contains the key
-        int indexFound = find(key);
+        // sequentially probe table while the slots contain
+        // active KVPairs.  At each active KVPair, check if it matches
+        // the key -- if so, update it and return immediately.
+        while (table[index] != null && table[index].active) {
 
-        if (indexFound >= 0) {
-            table[indexFound].value = value;  // update old value
-            return false;
-        }
-
-        // look for next empty or inactive spot
-        // TODO: change && -- need condition to short circuit if table[index] is null
-        while (table[index] != null || table[index].active) {
+            // if key matches, update the existing object
+            if (table[index].key.equals(key)) {
+                table[index].value = value;
+                table[index].active = true;
+                return;
+            }
 
             index = ++index % table.length;
         }
 
+        // current key is not active so create a new KVPair
+        // object for it and store it in the empty or
+        // tombstoned slot that was found.
+        if (table[index] != null) tombstones--;
         table[index] = new KVPair(key, value);
         size++;
-        usedSpaces++;
-        return true;
     }
 
-    // TODO: make helper method (private)
-    public int find(K key) {
-
-        if (tableUsageExceedsLF()) {
-            rehash();
-        }
-
+    // finds the table index based on the key
+    private int getHashIndex(K key) {
         int code = key.hashCode();
-        int index = code % table.length;
+        return code % table.length;
+    }
+
+    /**
+     * Finds (gets) the value for a given key.  If key doesn't exist in table,
+     * returns null;
+     * @param key
+     * @return value if key exists; otherwise, null.
+     */
+    public V find(K key) {
+
+        int index = getHashIndex(key);
 
         while (table[index] != null) {
 
             // is this index where the key resides?
             if (table[index].key.equals(key)) {
-                return index;
+                if (!table[index].active) break;
+                return (V) table[index].value;
             }
 
             index = ++index % table.length ;  // otherwise, look at next slot
         }
-
-        return -1;
+        return null;
     }
 
     // for adds
@@ -115,14 +135,37 @@ public class MyHashMap<K, V> {
         return (double) size / table.length >= LOAD_FACTOR;
     }
 
-    // for removes
-    public boolean tableUsageExceedsLF() {
-        return (double) usedSpaces / table.length >= LOAD_FACTOR;
-    }
 
     // resize the table
-    private void rehash() {
+    private void resize() {
         //TODO
+    }
+
+    /**
+     * Remove the value assocaited the key from the table.
+     * Does so using lazy deletion -- marks the KVPair as inactive.
+     * Will be cleaned up on next table resize.
+     */
+    public void delete(K key) {
+
+        // check key isn't null
+        if (key == null) throw new IllegalArgumentException("Key cannot be null");
+
+        int index = getHashIndex(key);
+
+        // sequentially proble table while the slots contain active KVPairs.
+        // At each active KVPair, check if it matches the key -- if so,
+        // update it to inactive and return.
+        while (table[index] != null) {
+
+            // see if the keys match
+            if (table[index].key.equals(key)) {
+                table[index].active = false;
+                tombstones++;
+                return;
+            }
+            index = ++index % table.length;
+        }
     }
 
     /***** INNER CLASSES ************/
