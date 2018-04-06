@@ -1,6 +1,9 @@
-import hashmap.MyHashMap;
+package test;
 
-public class TestHashMap {
+import java.util.Iterator;
+import hashmap.LPHashTable;
+
+public class TestLPHashTable {
 
     public static void main(String[] args) {
         Flight[] flights = new Flight[8];
@@ -13,7 +16,7 @@ public class TestHashMap {
         flights[6] = new Flight(777, "SFO", "SEA");
         flights[7] = new Flight(888, "SEA", "SFO");
 
-        MyHashMap<Integer, Flight> hashTbl = new MyHashMap<>();
+        LPHashTable<Integer, Flight> hashTbl = new LPHashTable<>();
 
         for (int i = 0; i < 4; i++) {
             System.out.println("Adding " + flights[i]);
@@ -26,6 +29,30 @@ public class TestHashMap {
         }
         System.out.println();
         System.out.println("Table size: " + hashTbl.size());
+        System.out.println("Table length: " + hashTbl.getTableLength());
+        System.out.println();
+
+        for (Flight flight : hashTbl) {
+            System.out.println(flight);
+        }
+        System.out.println();
+
+        for (int i = 4; i < flights.length; i++) {
+            System.out.println("Adding " + flights[i]);
+            hashTbl.add(flights[i].flightNo, flights[i]);
+        }
+        System.out.println();
+
+        for (Flight flight : hashTbl) {
+            System.out.println(flight);
+        }
+        System.out.println();
+        System.out.println("Table size: " + hashTbl.size());
+        System.out.println("Table length: " + hashTbl.getTableLength());
+        System.out.println();
+        System.out.println("Deleting flight #444");
+        System.out.println("Table size: " + hashTbl.size());
+
 
     }
 
