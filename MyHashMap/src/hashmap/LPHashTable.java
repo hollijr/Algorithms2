@@ -202,7 +202,10 @@ public class LPHashTable<K, V> implements Iterable<V> {
 
     /***** INNER CLASSES ************/
 
-    // define inner class that contains both key K and value V
+    // define inner class that contains both key K and value
+    // Have to add generic parameters here as a workaround.  Normally
+    // it isn't necessary since paramters are declared by outer class
+
     private class KVPair<K, V> {
 
         private K key;
