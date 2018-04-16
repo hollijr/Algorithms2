@@ -1,5 +1,6 @@
 package heaps;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 public class BinaryHeap<E extends Comparable<E>> implements IPriorityQueue<E> {
@@ -12,6 +13,7 @@ public class BinaryHeap<E extends Comparable<E>> implements IPriorityQueue<E> {
     // instance variables
     private E[] heap;
     private int size; // represents the number of element in the heap
+    private int modcount;
 
     // constructor
     public BinaryHeap() {
@@ -41,6 +43,7 @@ public class BinaryHeap<E extends Comparable<E>> implements IPriorityQueue<E> {
 
         heap[++size] = element;  // puts element at end of array
         swim(size);
+        modcount++;
     }
 
     private void resize() {
@@ -94,6 +97,7 @@ public class BinaryHeap<E extends Comparable<E>> implements IPriorityQueue<E> {
 
         // restore the heap-order property
         sink(MIN_INDEX);
+        modcount++;
 
         return returnElement; // returns the min
     }
@@ -138,16 +142,20 @@ public class BinaryHeap<E extends Comparable<E>> implements IPriorityQueue<E> {
     public void clear() {
         size = 0;
         heap = (E[]) new Comparable[INITIAL_CAPACITY + 1];
+        modcount++;
     }
 
     @Override
     public boolean contains(E element) {
+        for (E e : heap) {  // iterate over internal array
+            if (element.equals(e)) return true;
+        }
         return false;
     }
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new HeapIterator();
     }
 
     // Floyd's method implementation
@@ -155,6 +163,29 @@ public class BinaryHeap<E extends Comparable<E>> implements IPriorityQueue<E> {
         // loop from mid-array forward
         for (int i = size / 2; i >= MIN_INDEX; i--) {
             sink(i);
+        }
+    }
+
+    private class HeapIterator implements Iterator<E> {
+
+        private int nextIndex = MIN_INDEX;
+        private int origModCount;
+
+        public HeapIterator() {
+            origModCount = modcount;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return nextIndex <= size;
+        }
+
+        @Override
+        public E next() {
+            if (modcount != origModCount) {
+                throw new ConcurrentModificationException("Cannot modify heap during iteration");
+            }
+            return heap[nextIndex++];
         }
     }
 }

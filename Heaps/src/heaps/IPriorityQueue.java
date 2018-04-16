@@ -2,7 +2,7 @@ package heaps;
 
 import java.util.Iterator;
 
-public interface IPriorityQueue<T extends Comparable<T>> {
+public interface IPriorityQueue<T extends Comparable<T>> extends Iterable<T> {
 
     // ADT methods
     public void insert(T element);
