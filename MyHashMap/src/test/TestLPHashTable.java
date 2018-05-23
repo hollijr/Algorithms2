@@ -18,6 +18,7 @@ public class TestLPHashTable {
 
         LPHashTable<Integer, Flight> hashTbl = new LPHashTable<>();
 
+
         for (int i = 0; i < 4; i++) {
             System.out.println("Adding " + flights[i]);
             hashTbl.add(flights[i].flightNo, flights[i]);
