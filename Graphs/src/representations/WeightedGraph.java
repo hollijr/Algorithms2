@@ -33,7 +33,7 @@ public class WeightedGraph {
     /**
      * Adds an edge if not already present.
      * If edge exists, updates the weight of the edge.
-     * @returns true if the edge was added and false if it was updated.
+     * @return true if the edge was added and false if it was updated.
      */
     public boolean addEdge(int from, int to, double weight) {
         // validate that the vertices exist in the graph
@@ -45,11 +45,13 @@ public class WeightedGraph {
 
         if (current == null) {
 
-            // add first ENode to the list
+            // add forward-direction edge (ENode) to front of the 'from' vertex's adjList
             adjList[from] = new ENode(from, to, weight, current);
 
             // make sure not a loop
             if (from != to) {
+
+                // add reverse-direction edge to front of 'to' vertex's adjList
                 adjList[to] = new ENode(to, from, weight, adjList[to]);
             }
             E++;
@@ -137,6 +139,11 @@ public class WeightedGraph {
         return vertex >= 0 && vertex < V;
     }
 
+    /**
+     * Indicates whether a vertex has any edges attached
+     * @param vertex
+     * @return true if it has at least one edge; false otherwise.
+     */
     public boolean hasEdges(int vertex) {
         isValid(vertex);
 
@@ -173,12 +180,19 @@ public class WeightedGraph {
 
     //************ VIEWING INTERNAL DATA *******************//
 
+    /**
+     * Displays graph vertices and their corresponding set of edges.
+     */
     public void printGraph() {
         for (int i = 0; i < adjList.length; i++) {
             printEdges(i);
         }
     }
 
+    /**
+     * Displays a vertex's set of edges
+     * @param i
+     */
     public void printEdges(int i) {
         String edges = "V" + i + ": {";
         ENode current = adjList[i];  // get first edge in list
@@ -193,7 +207,36 @@ public class WeightedGraph {
     }
 
 
-    //********************** INNER CLASS *******************//
+    //************* TRAVERSALS ****************************//
+
+    /**
+     * Performs depth-first search from specified starting vertex
+     */
+    // recursive depth-first traversal
+    public int dfs(int start) {
+        boolean[] marked = new boolean[V];
+        System.out.print("DFS: " + start);
+        int count = dfs(start, marked, 0);
+        System.out.println();
+        return count;
+    }
+
+    private int dfs(int v, boolean[] marked, int count) {
+        marked[v] = true;
+        count++;
+        ENode current = adjList[v];
+        while (current != null) {
+            if (!marked[current.to]) {
+                System.out.print("->" + current.to);
+                count = dfs(current.to, marked, count);
+            }
+            current = current.next;
+        }
+        return count;
+    }
+
+
+    // ********************** INNER CLASS *******************//
 
     // represents an edge
     private class ENode {

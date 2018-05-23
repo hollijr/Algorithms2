@@ -43,5 +43,7 @@ public class TestWeightedGraph {
         } catch (NoSuchElementException ex) {
             System.out.println(ex.getMessage());
         }
+
+        System.out.println("DFS from 1 has " + graph.dfs(1) + " vertices.");
     }
 }
